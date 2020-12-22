@@ -1,0 +1,85 @@
+//if keypad button pressed
+		if (KP_Get_Key() != FALSE)
+		{
+			//read input from keypad
+			num = KP_Get_Key();
+			LCD_SendChar('*');
+			//calculate the number
+			password = (password * 10) + num;
+			_delay_ms(300);
+			count++;
+			if (count >= 4)
+			{
+				if (password == PASSWORD)
+				{
+					LCD_ClrScreen();
+					LCD_SendString("Correct Password");
+					LCD_GotoXY(1,0);
+					LCD_SendString("Send Command");
+					_delay_ms(1000);
+					LCD_ClrScreen();
+					while (1)
+					{
+						//get command
+						//command = 0;
+						*command = USART_ReceiveString();
+						//LCD_GotoXY(0,0);
+						LCD_ClrScreen();
+						LCD_SendString(*command);
+						//////////////////////////
+						/*
+						if (KP_Get_Key() != FALSE)
+						{
+							command = KP_Get_Key();
+							_delay_ms(300);
+						}*/
+						////////////////////////
+						//switch action
+						switch (num)
+						{
+						case 1:
+							DIO_FlipPin('A',PIN2);//led1 command for toggle light 1
+							break;
+						case 2:
+							DIO_FlipPin('A',PIN3);//led2 command for toggle light 2
+							break;
+						case 3:
+							DIO_FlipPin('B',PIN0);//led3 command for toggle light 3
+							break;
+						default:
+							break;
+						}
+							//s10 to rotate servo motor to angle 10
+					}
+				}
+				//if password wrong
+				else
+				{
+					count = 0;
+					password = 0;
+					LCD_ClrScreen();
+					LCD_SendString("Wrong Password");//show password is wrong on lcd
+					LCD_GotoXY(1,0);
+					LCD_SendString("Enter Password");
+					_delay_ms(1000);
+					LCD_ClrScreen();
+				}
+			}
+		}
+	}
+}
+//ISR (ADC_COMPLETE)
+//{
+	//LCD_GotoXY(0,0);
+	//LCD_SendString("Temperature=");
+	//LCD_SendNumber(LM35_ReadTemp());
+	//LCD_SendChar('C');
+	//read lm35 sensor
+	//display temperature on lcd
+	//buzzer on if temp high
+//}
+/*
+//get password loop till the password is correct
+//
+//
+*/
